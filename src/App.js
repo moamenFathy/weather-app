@@ -6,6 +6,7 @@ import {
   ThemeProvider,
   Container,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import CloudIcon from "@mui/icons-material/Cloud";
 import axios from "axios";
@@ -17,6 +18,7 @@ let cancelAxios = null;
 function App() {
   const [date, setDate] = useState("");
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     temp: null,
     name: null,
@@ -47,6 +49,7 @@ function App() {
             }
           )
           .then((response) => {
+            setLoading(true);
             const name = response.data.name
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, "");
@@ -63,9 +66,11 @@ function App() {
               min,
               icon,
             });
-            console.log(data);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log(err))
+          .finally(() => {
+            setLoading(false);
+          });
       },
       (error) => {
         setError(true);
@@ -73,7 +78,6 @@ function App() {
     );
 
     return () => {
-      console.log("canceling");
       if (cancelAxios) {
         cancelAxios();
       }
@@ -95,96 +99,100 @@ function App() {
               gap: 15,
             }}
           >
-            {/* Card */}
-            <div
-              style={{
-                width: "100%",
-                backgroundColor: "rgb(28 52 91 / 36%)",
-                color: "white",
-                padding: "10px",
-                borderRadius: "15px",
-                boxShadow: "0px 11px 1px rgba(0, 0, 0, 0.05)",
-              }}
-            >
-              {/* Content */}
-              <div>
-                {/* City & Time */}
+            {loading ? (
+              <CircularProgress color="inherit" size="3rem" />
+            ) : (
+              // Card
+              <div
+                style={{
+                  width: "100%",
+                  backgroundColor: "rgb(28 52 91 / 36%)",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "15px",
+                  boxShadow: "0px 11px 1px rgba(0, 0, 0, 0.05)",
+                }}
+              >
+                {/* Content */}
                 <div>
-                  <Typography variant="h2" sx={{ fontFamily: "" }} mr={2.5}>
-                    {data.name}
-                  </Typography>
-                  <Typography variant="h5" mr={2.5}>
-                    {date}
-                  </Typography>
-                </div>
-                {/* ==City & Time== */}
-                <hr />
-                <Stack
-                  gap={3}
-                  direction="row"
-                  sx={{
-                    display: "flex",
-                    justifyContent: {
-                      xs: "center",
-                      sm: "center",
-                      md: "space-around",
-                      lg: "space-around",
-                    },
-                  }}
-                >
-                  {/* Degree & Description */}
+                  {/* City & Time */}
                   <div>
-                    {/* Temp */}
-                    <Stack
-                      direction="row"
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Typography variant="h1" sx={{ textAlign: "right" }}>
-                        {data.temp}
-                      </Typography>
-                      <img src={data.icon} alt="weather icon" />
-                      {/* Todo Temp Image */}
-                      {/* ==Todo Temp Image== */}
-                    </Stack>
-                    {/* ==Temp== */}
-                    <Typography variant="h6">
-                      {data.weatherDescription}
+                    <Typography variant="h2" sx={{ fontFamily: "" }} mr={2.5}>
+                      {data.name}
                     </Typography>
-                    {/* Min & Max */}
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: 10,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <h5>min: {data.min}</h5>
-                      <h5> | </h5>
-                      <h5>max: {data.max} </h5>
-                    </div>
-                    {/* ==Min & Max== */}
+                    <Typography variant="h5" mr={2.5}>
+                      {date}
+                    </Typography>
                   </div>
-                  {/* ==Degree & Description== */}
-                  <CloudIcon
+                  {/* ==City & Time== */}
+                  <hr />
+                  <Stack
+                    gap={3}
+                    direction="row"
                     sx={{
-                      fontSize: 200,
-                      display: {
-                        xs: "none",
-                        sm: "block",
-                        md: "block",
-                        lg: "block",
+                      display: "flex",
+                      justifyContent: {
+                        xs: "center",
+                        sm: "center",
+                        md: "space-around",
+                        lg: "space-around",
                       },
                     }}
-                  />
-                </Stack>
+                  >
+                    {/* Degree & Description */}
+                    <div>
+                      {/* Temp */}
+                      <Stack
+                        direction="row"
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography variant="h1" sx={{ textAlign: "right" }}>
+                          {data.temp}
+                        </Typography>
+                        <img src={data.icon} alt="weather icon" />
+                        {/* Todo Temp Image */}
+                        {/* ==Todo Temp Image== */}
+                      </Stack>
+                      {/* ==Temp== */}
+                      <Typography variant="h6">
+                        {data.weatherDescription}
+                      </Typography>
+                      {/* Min & Max */}
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: 10,
+                          justifyContent: "center",
+                        }}
+                      >
+                        <h5>min: {data.min}</h5>
+                        <h5> | </h5>
+                        <h5>max: {data.max} </h5>
+                      </div>
+                      {/* ==Min & Max== */}
+                    </div>
+                    {/* ==Degree & Description== */}
+                    <CloudIcon
+                      sx={{
+                        fontSize: 200,
+                        display: {
+                          xs: "none",
+                          sm: "block",
+                          md: "block",
+                          lg: "block",
+                        },
+                      }}
+                    />
+                  </Stack>
+                </div>
+                {/* ==Content== */}
               </div>
-              {/* ==Content== */}
-            </div>
-            {/* ==Card== */}
+              // ==Card==
+            )}
             <div
               style={{
                 // display: error ? "flex" : "default",
@@ -200,7 +208,7 @@ function App() {
                     color: "greenyellow",
                   }}
                 >
-                  الرجاء تفعيل امكانيه الوصول للموقع
+                  Please enable site access
                 </Typography>
               )}
             </div>
