@@ -193,9 +193,6 @@ function App() {
                 textAlign: "start",
               }}
             >
-              <Button variant="text" sx={{ color: "white" }}>
-                arabic
-              </Button>
               {error && (
                 <Typography
                   component="p"
