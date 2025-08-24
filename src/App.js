@@ -109,7 +109,7 @@ function App() {
               {/* Content */}
               <div>
                 {/* City & Time */}
-                <div dir="rtl">
+                <div>
                   <Typography variant="h2" sx={{ fontFamily: "" }} mr={2.5}>
                     {data.name}
                   </Typography>
@@ -131,7 +131,6 @@ function App() {
                       lg: "space-around",
                     },
                   }}
-                  dir="rtl"
                 >
                   {/* Degree & Description */}
                   <div>
@@ -163,9 +162,9 @@ function App() {
                         justifyContent: "center",
                       }}
                     >
-                      <h5>الصغري: {data.min}</h5>
+                      <h5>min: {data.min}</h5>
                       <h5> | </h5>
-                      <h5>الكبري: {data.max} </h5>
+                      <h5>max: {data.max} </h5>
                     </div>
                     {/* ==Min & Max== */}
                   </div>
