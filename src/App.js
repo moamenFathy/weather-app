@@ -10,10 +10,12 @@ import {
 import CloudIcon from "@mui/icons-material/Cloud";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import moment from "moment";
+import "moment/min/locales";
 
 let cancelAxios = null;
 function App() {
-  console.log("re render");
+  const [date, setDate] = useState("");
   const [error, setError] = useState(false);
   const [data, setData] = useState({
     temp: null,
@@ -31,6 +33,7 @@ function App() {
   });
 
   useEffect(() => {
+    setDate(moment().format("llll"));
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
         setError(false);
@@ -106,24 +109,18 @@ function App() {
               {/* Content */}
               <div>
                 {/* City & Time */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "end",
-                    justifyContent: "start",
-                  }}
-                  dir="rtl"
-                >
+                <div dir="rtl">
                   <Typography variant="h2" sx={{ fontFamily: "" }} mr={2.5}>
                     {data.name}
                   </Typography>
                   <Typography variant="h5" mr={2.5}>
-                    4-5-2072
+                    {date}
                   </Typography>
                 </div>
                 {/* ==City & Time== */}
                 <hr />
                 <Stack
+                  gap={3}
                   direction="row"
                   sx={{
                     display: "flex",
@@ -198,16 +195,17 @@ function App() {
               }}
             >
               <Button variant="text" sx={{ color: "white" }}>
-                انجليزي
+                arabic
               </Button>
               {error && (
-                <p
+                <Typography
+                  component="p"
                   style={{
                     color: "greenyellow",
                   }}
                 >
                   الرجاء تفعيل امكانيه الوصول للموقع
-                </p>
+                </Typography>
               )}
             </div>
           </div>
